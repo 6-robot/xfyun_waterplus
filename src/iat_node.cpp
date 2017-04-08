@@ -1,37 +1,5 @@
-/*********************************************************************
-* Software License Agreement (BSD License)
-* 
-*  Copyright (c) 2017-2020, Waterplus http://www.6-robot.com
-*  All rights reserved.
-* 
-*  Redistribution and use in source and binary forms, with or without
-*  modification, are permitted provided that the following conditions
-*  are met:
-* 
-*   * Redistributions of source code must retain the above copyright
-*     notice, this list of conditions and the following disclaimer.
-*   * Redistributions in binary form must reproduce the above
-*     copyright notice, this list of conditions and the following
-*     disclaimer in the documentation and/or other materials provided
-*     with the distribution.
-*   * Neither the name of the WaterPlus nor the names of its
-*     contributors may be used to endorse or promote products derived
-*     from this software without specific prior written permission.
-* 
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-*  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-*  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-*  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-*  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-*  FOOTPRINTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-*  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-*  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-*  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-*  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-*  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-*  POSSIBILITY OF SUCH DAMAGE.
-*********************************************************************/
-/* @author Zhang Wanjie                                             */
+/* Copiright belong to xfyun(IFLYTEK CO.,LTD)                            */
+/* @modified by Zhang Wanjie                                             */
 #include <ros/ros.h>
 #include <std_msgs/String.h>
 #include <stdlib.h>
@@ -42,11 +10,13 @@
 #include "msp_cmn.h"
 #include "msp_errors.h"
 #include "speech_recognizer.h"
+#include "xfyun_waterplus/IATSwitch.h"
 
 #define FRAME_LEN	640 
 #define	BUFFER_SIZE	4096
 
 static ros::Publisher iat_pub;
+static int nRecDuring = 10;
 
 static char *g_result = NULL;
 static unsigned int g_buffersize = BUFFER_SIZE;
@@ -120,7 +90,7 @@ static void demo_mic(const char* session_begin_params)
 		printf("start listen failed %d\n", errcode);
 	}
     
-	while(i++ < 10)
+	while(i++ < nRecDuring)
 		sleep(1);
 	errcode = sr_stop_listening(&iat);
 	if (errcode) {
@@ -130,7 +100,22 @@ static void demo_mic(const char* session_begin_params)
 	sr_uninit(&iat);
 }
 
-static bool bActive = true;
+static bool bActive = false;
+bool iat_start(xfyun_waterplus::IATSwitch::Request  &req, xfyun_waterplus::IATSwitch::Response &res)
+{
+	bActive = req.active;
+	if(bActive == true)
+	{
+		nRecDuring = req.duration;
+		printf("[IATSwitch] 语音识别开启! 识别时长为 %d 秒\n",nRecDuring);
+	}
+	else
+	{
+		printf("[IATSwitch] 语音识别关闭!\n");
+	}
+	return true;
+}
+
 int main(int argc, char* argv[])
 {
 
@@ -138,6 +123,7 @@ int main(int argc, char* argv[])
 
     ros::NodeHandle n;
     iat_pub = n.advertise<std_msgs::String>("/xfyun/iat", 20);
+    ros::ServiceServer start_svr = n.advertiseService("xfyun_waterplus/IATSwitch", iat_start);
 
 	ros::NodeHandle n_param("~");
     bool bCN = false;
@@ -145,7 +131,7 @@ int main(int argc, char* argv[])
     n_param.param<bool>("start", bActive, true);
 
 	int ret = MSP_SUCCESS;
-	const char* login_params = "appid = 58d70e0e, work_dir = .";
+	const char* login_params = "appid = 58eeeedf, work_dir = .";
 
 	char session_begin_params[512];
 	if(bCN == true)
@@ -166,7 +152,7 @@ int main(int argc, char* argv[])
 	{
 		if(bActive == true)
 		{
-			printf("请在 10 秒内下达命令\n");
+			printf("请在 %d 秒内下达命令\n",nRecDuring);
 			demo_mic(session_begin_params);
 			printf("开始识别\n");
 		}
