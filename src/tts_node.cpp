@@ -139,10 +139,10 @@ void tts_callback(const std_msgs::String::ConstPtr& msg)
     const char* text;
     int         ret                  = MSP_SUCCESS;
     const char* session_begin_params = "voice_name = xiaoyan, text_encoding = utf8, sample_rate = 16000, speed = 50, volume = 50, pitch = 50, rdn = 2";
-    const char* filename             = "/tmp/tts_result.wav"; //合成的语音文件名称
+    const char* filename             = "/dev/shm/tts_result.wav"; //合成的语音文件名称
 
 
-    std::cout<<"I heard :"<<msg->data.c_str()<<std::endl;
+    std::cout<<"speak :"<<msg->data.c_str()<<std::endl;
     text = msg->data.c_str(); 
     /* 文本合成 */
     printf("开始合成 ...\n");
@@ -155,7 +155,7 @@ void tts_callback(const std_msgs::String::ConstPtr& msg)
     sound_play::SoundRequest sp;
     sp.sound = sound_play::SoundRequest::PLAY_FILE;
     sp.command = sound_play::SoundRequest::PLAY_ONCE;
-    sp.arg = "/tmp/tts_result.wav";
+    sp.arg = "/dev/shm/tts_result.wav";
     play_pub.publish(sp);
 
 }

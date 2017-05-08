@@ -12,6 +12,8 @@
 #include "speech_recognizer.h"
 #include "xfyun_waterplus/IATSwitch.h"
 
+static bool bCue = true;	//true-语音识别前有提示音; false-语音识别前没有提示音
+
 #define FRAME_LEN	640 
 #define	BUFFER_SIZE	4096
 
@@ -57,6 +59,13 @@ void on_speech_begin()
 	memset(g_result, 0, g_buffersize);
 
 	printf("开始录音...\n");
+
+	if(bCue == true)
+	{
+		std::stringstream ss;
+		ss << "aplay -q /home/robot/catkin_ws/src/xfyun_waterplus/sound/on.wav"; //16khz,单声道
+		system(ss.str().c_str());
+	}
 }
 
 void on_speech_end(int reason)
@@ -89,7 +98,6 @@ static void demo_mic(const char* session_begin_params)
 	if (errcode) {
 		printf("start listen failed %d\n", errcode);
 	}
-    
 	while(i++ < nRecDuring)
 		sleep(1);
 	errcode = sr_stop_listening(&iat);
@@ -127,6 +135,7 @@ int main(int argc, char* argv[])
 
 	ros::NodeHandle n_param("~");
     bool bCN = false;
+    n_param.param<bool>("cue", bCue, true);
     n_param.param<bool>("cn", bCN, false); 
     n_param.param<bool>("start", bActive, true);
 

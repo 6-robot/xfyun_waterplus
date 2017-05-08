@@ -230,3 +230,41 @@ add_dependencies(wp_voice_cmd_cn ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EX
 target_link_libraries(wp_voice_cmd_cn
   ${catkin_LIBRARIES}
 )
+
+add_executable(recorder_wav_node
+  src/recorder_wav_node.cpp
+)
+add_dependencies(recorder_wav_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(recorder_wav_node 
+  ${catkin_LIBRARIES} -lasound
+)
+
+add_executable(wav_rate_node
+  src/wav_rate_node.cpp
+  )
+add_dependencies(wav_rate_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(wav_rate_node
+  ${catkin_LIBRARIES}
+)
+
+add_executable(asr_node
+  src/asr_node.cpp
+  src/xfyun/speech_recognizer.c 
+  src/xfyun/linuxrec.c
+)
+add_dependencies(asr_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(asr_node
+  ${catkin_LIBRARIES}
+   ${LIBS} 
+)
+
+add_executable(iat_file
+  src/iat_file.cpp
+  src/xfyun/speech_recognizer.c 
+  src/xfyun/linuxrec.c
+)
+add_dependencies(iat_file ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(iat_file
+  ${catkin_LIBRARIES}
+   ${LIBS} 
+)
