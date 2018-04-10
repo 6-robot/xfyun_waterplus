@@ -256,7 +256,7 @@ int main(int argc, char* argv[])
 	memset(grammar_id, 0, GRAMID_LEN);
 
 	printf("上传语法 ...\n");
-	ret = get_grammar_id("/home/robot/catkin_ws/src/wpb_home_apps_2017/asr/1_follow.bnf", grammar_id, GRAMID_LEN);
+	ret = get_grammar_id("/home/robot/catkin_ws/src/wpb_home_apps/asr/1_follow.bnf", grammar_id, GRAMID_LEN);
 	if (MSP_SUCCESS != ret)
 		goto exit;
 	printf("上传语法成功\n");
