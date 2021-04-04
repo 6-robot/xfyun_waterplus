@@ -1,19 +1,21 @@
-# xfyun语音识别(kinetic版本)
+# xfyun语音识别(melodic版本)
 
 ## 使用步骤
 
-1. 安装ROS(kinetic/Ubuntu 16.04). [安装步骤](http://wiki.ros.org/kinetic/Installation/Ubuntu)
+1. 安装ROS(melodic/Ubuntu 18.04). [安装步骤](http://wiki.ros.org/melodic/Installation/Ubuntu)
 2. 配置好开发环境. [配置方法](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment)
 3. 安装依赖项:
 ```
-sudo apt-get install ros-kinetic-audio-common
+sudo apt-get install ros-melodic-audio-common
 sudo apt-get install libasound2
-sudo apt-get install ros-kinetic-sound-play
+sudo apt-get install ros-melodic-sound-play
 ```
 4. 获取源码:
 ```
 cd ~/catkin_ws/src/
-git clone https://github.com/6-robot/xfyun_kinetic.git
+git clone https://github.com/6-robot/xfyun_waterplus.git
+cd ~/catkin_ws/src/xfyun_waterplus/
+git checkout melodic
 ```
 5. 编译
 ```
