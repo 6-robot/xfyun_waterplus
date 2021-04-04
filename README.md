@@ -1,19 +1,19 @@
-# xfyun语音识别(indigo版本)
+# xfyun语音识别(kinetic版本)
 
 ## 使用步骤
 
-1. 安装ROS(indigo/Ubuntu 14.04). [安装步骤](http://wiki.ros.org/indigo/Installation/Ubuntu)
+1. 安装ROS(kinetic/Ubuntu 16.04). [安装步骤](http://wiki.ros.org/kinetic/Installation/Ubuntu)
 2. 配置好开发环境. [配置方法](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment)
 3. 安装依赖项:
 ```
-sudo apt-get install ros-indigo-audio-common
+sudo apt-get install ros-kinetic-audio-common
 sudo apt-get install libasound2
-sudo apt-get install ros-indigo-sound-play
+sudo apt-get install ros-kinetic-sound-play
 ```
 4. 获取源码:
 ```
 cd ~/catkin_ws/src/
-git clone https://github.com/6-robot/xfyun_waterplus.git
+git clone https://github.com/6-robot/xfyun_kinetic.git
 ```
 5. 编译
 ```
@@ -36,9 +36,9 @@ roslaunch xfyun_waterplus iat_cn.launch
 ```
 roslaunch xfyun_waterplus iat_en.launch
 ```
-### 3. 启智ROS脚本
-对于[启智ROS机器人](https://github.com/6-robot/wpb_home),使用如下脚本启动语音识别引擎:
+### 3. 启明1脚本
+对于[启明1服务机器人](https://github.com/6-robot/wpr1),使用如下脚本启动语音识别引擎:
 ```
-roslaunch xfyun_waterplus voice_cmd_wpb_home.launch
+roslaunch wpr1_tutorials speech_recognition.launch
 ```
 

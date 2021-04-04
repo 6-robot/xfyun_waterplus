@@ -155,6 +155,7 @@ void tts_callback(const std_msgs::String::ConstPtr& msg)
     sound_play::SoundRequest sp;
     sp.sound = sound_play::SoundRequest::PLAY_FILE;
     sp.command = sound_play::SoundRequest::PLAY_ONCE;
+    sp.volume = 100.0;
     sp.arg = "/dev/shm/tts_result.wav";
     play_pub.publish(sp);
 
