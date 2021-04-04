@@ -1,21 +1,21 @@
-# xfyun语音识别(melodic版本)
+# xfyun语音识别(noetic版本)
 
 ## 使用步骤
 
-1. 安装ROS(melodic/Ubuntu 18.04). [安装步骤](http://wiki.ros.org/melodic/Installation/Ubuntu)
+1. 安装ROS(noetic/Ubuntu 20.04). [安装步骤](http://wiki.ros.org/noetic/Installation/Ubuntu)
 2. 配置好开发环境. [配置方法](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment)
 3. 安装依赖项:
 ```
-sudo apt-get install ros-melodic-audio-common
+sudo apt-get install ros-noetic-audio-common
 sudo apt-get install libasound2
-sudo apt-get install ros-melodic-sound-play
+sudo apt-get install ros-noetic-sound-play
 ```
 4. 获取源码:
 ```
 cd ~/catkin_ws/src/
 git clone https://github.com/6-robot/xfyun_waterplus.git
 cd ~/catkin_ws/src/xfyun_waterplus/
-git checkout melodic
+git checkout noetic
 ```
 5. 编译
 ```
