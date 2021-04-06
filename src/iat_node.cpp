@@ -17,6 +17,8 @@ static bool bCue = true;	//true-语音识别前有提示音; false-语音识别�
 #define FRAME_LEN	640 
 #define	BUFFER_SIZE	4096
 
+static std::string strOnSoundFile;
+
 static ros::Publisher iat_pub;
 static int nRecDuring = 10;
 
@@ -59,11 +61,12 @@ void on_speech_begin()
 	memset(g_result, 0, g_buffersize);
 
 	printf("开始录音...\n");
-
+ 
 	if(bCue == true)
 	{
 		std::stringstream ss;
-		ss << "aplay -q /home/robot/catkin_ws/src/xfyun_waterplus/sound/on.wav"; //16khz,单声道
+		// ss << "aplay -q /home/robot/catkin_ws/src/xfyun_waterplus/sound/on.wav"; //16khz,单声道
+		ss << "aplay -q " << strOnSoundFile;
 		system(ss.str().c_str());
 	}
 }
@@ -132,6 +135,10 @@ int main(int argc, char* argv[])
     ros::NodeHandle n;
     iat_pub = n.advertise<std_msgs::String>("/xfyun/iat", 20);
     ros::ServiceServer start_svr = n.advertiseService("xfyun_waterplus/IATSwitch", iat_start);
+
+    char const* home = getenv("HOME");
+    strOnSoundFile = home;
+	strOnSoundFile += "/catkin_ws/src/xfyun_waterplus/sound/on.wav";
 
 	ros::NodeHandle n_param("~");
     bool bCN = false;

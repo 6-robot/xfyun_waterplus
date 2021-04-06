@@ -51,6 +51,8 @@ FILE *capture_file;
 unsigned int size = 0;
 snd_pcm_t *capture_handle;
 
+static std::string strOnSoundFile;
+
 void write_wav_header(unsigned char *header, uint16_t wFormatTag, uint16_t wChannels, 
 			uint32_t dwSamplesPerSec, uint16_t wBitsPerSample)
 {
@@ -173,6 +175,10 @@ int main(int argc, char *argv[])
 {
 	ros::init(argc, argv, "waterplus_recorder_wav");
 
+    char const* home = getenv("HOME");
+    strOnSoundFile = home;
+	strOnSoundFile += "/catkin_ws/src/xfyun_waterplus/sound/on.wav";
+
 	int ret;
 	short buf[BUFSIZE * 2];
 
@@ -264,12 +270,13 @@ int main(int argc, char *argv[])
 			fwrite(&wav_header, sizeof(wav_header), 1, capture_file);
 
 			signal(SIGINT, stop);
-
+ 
 			//提示音
 			sound_play::SoundRequest sp;
 			sp.sound = sound_play::SoundRequest::PLAY_FILE;
 			sp.command = sound_play::SoundRequest::PLAY_ONCE;
-			sp.arg = "/home/robot/catkin_ws/src/xfyun_waterplus/sound/on.wav";
+			// sp.arg = "/home/robot/catkin_ws/src/xfyun_waterplus/sound/on.wav";
+			sp.arg = strOnSoundFile;
 			play_pub.publish(sp);
 			usleep(1000*1000);
 
