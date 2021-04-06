@@ -40,14 +40,16 @@
 #include "std_msgs/String.h"
 
 static ros::Publisher reco_pub;
+static std::string strHomeDir;
 
 void sndFileCallback(const std_msgs::String::ConstPtr& msg)
 {
 	ROS_INFO("ffmpeg: [%s]", msg->data.c_str());
 	std::stringstream ss;
 	//ss << "/home/robot/speech_" << count << ".wav";
-	ss << "/home/robot/catkin_ws/src/xfyun_waterplus/tools/ffmpeg -i " << msg->data << " -v 0 -map_channel 0.0.0 -ar 16k -y /dev/shm/tmp.wav"; //16khz,单声道
-	system(ss.str().c_str());
+	// ss << "/home/robot/catkin_ws/src/xfyun_waterplus/tools/ffmpeg -i " << msg->data << " -v 0 -map_channel 0.0.0 -ar 16k -y /dev/shm/tmp.wav"; //16khz,单声道
+	ss << strHomeDir << "/catkin_ws/src/xfyun_waterplus/tools/ffmpeg -i " << msg->data << " -v 0 -map_channel 0.0.0 -ar 16k -y /dev/shm/tmp.wav"; 
+	int res = system(ss.str().c_str());
 
 	std_msgs::String reco_msg;
 	reco_msg.data = "/dev/shm/tmp.wav";
@@ -57,6 +59,9 @@ void sndFileCallback(const std_msgs::String::ConstPtr& msg)
 int main(int argc, char *argv[])
 {
 	ros::init(argc, argv, "wav_rate_node");
+
+    char const* home = getenv("HOME");
+    strHomeDir = home;
 
 	ros::NodeHandle n;
 	reco_pub = n.advertise<std_msgs::String>("/xfyun/reco_file", 2);
